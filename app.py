@@ -58,7 +58,7 @@ def register_user():
         cur = conn.cursor()
 
         cur.execute(
-            "INSERT INTO users (username, email) VALUES (%s, %s) RETURING id",
+            "INSERT INTO users (username, email) VALUES (%s, %s) RETURNING id",
             (username, email)
         )
 
