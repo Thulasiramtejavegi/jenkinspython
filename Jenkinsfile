@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('checkout'){
+        stage('checkout') {
             steps {
                 checkout scm
             }
@@ -26,10 +26,12 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    sh "echo ${DOCKER_HUB_CREDS_PSW | docker login -u ${DOCKER_HUB_CREDS_USR}} --password-stdin"
-                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-                    sh "docker push ${IMAGE_NAME}:latest"
-                    sh "docker logout"
+                    sh """
+                        echo "${DOCKER_HUB_CREDS_PSW}" | docker login -u "${DOCKER_HUB_CREDS_USR}" --password-stdin
+                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                        docker push ${IMAGE_NAME}:latest
+                        docker logout
+                    """
                 }
             }
         }
@@ -37,7 +39,7 @@ pipeline {
         stage('deploy (remote or manual)') {
             steps {
                 echo "Docker Image Pushed: ${IMAGE_NAME}:${IMAGE_TAG}"
-                echo "you can now pull & deploy this image on your server using docker-compose."
+                echo "You can now pull & deploy this image on your server using docker-compose."
             }
         }
 
@@ -49,6 +51,5 @@ pipeline {
                 }
             }
         }
-
     }
 }
